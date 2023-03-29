@@ -5,7 +5,7 @@ from bot_func.bot_functions import *
 from google_maps.get_place_info import get_reviews_for_place
 
 keys=[]
-with open('/home/naya/MyPythonExercises/finalProject/secret/secret.txt','r') as f:
+with open('/home/naya/NayaBigDataProject/secret/secret.txt','r') as f:
      keys.append(f.read().split('\n'))
 
 google_maps_key = keys[0][0].split('google_maps_key:')[1].replace("'","")

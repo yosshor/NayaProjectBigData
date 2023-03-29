@@ -22,5 +22,7 @@ dag = DAG('Inbal_API2',
 
 t1 = BashOperator(
     task_id='read_api',
-    bash_command='python "/home/naya/airflow/dags/scripts/MapAPI_ImportReviews_Extended.py"',
+    bash_command='python "/home/naya/NayaBigDataProject/airflow/map_api_import_from_mongo.py"',
     dag=dag)
+
+    

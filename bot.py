@@ -12,6 +12,9 @@ google_maps_key = keys[0][0].split('google_maps_key:')[1].replace("'","")
 bot_token = keys[0][1].split('bot_token:')[1].replace("'","")
 print(bot_token,google_maps_key)
 
+
+
+
 bot = telebot.TeleBot(bot_token)
 parquet_path = 'hdfs://cnt7-naya-cdh63:8020/tmp/staging/hdfsProject/'
 place_dict = {}
@@ -39,14 +42,16 @@ def add_place_handler(message):
 
 
 def add_place_confirmation(message):
+    #if place exists, insert place_id and place name to MongoDB and send to kafka
+
     user_response = message.text
     if user_response == 'N':
         sent_msg = bot.send_message(message.chat.id, 'Please try again')
     elif user_response == 'Y':
         res = insert_place_to_mongo(place_dict['place'], place_dict['place_id'])
-        #send to kafka
         get_reviews_for_place(place_dict['place_id'],google_maps_key)
         sent_msg = bot.send_message(message.chat.id, f"{place_dict['place']} added")
+        get_nearby_places(place_dict['place'],google_maps_key)
     else:
         sent_msg = bot.send_message(message.chat.id, 'Please reply with Y or N')
 

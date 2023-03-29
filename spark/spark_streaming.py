@@ -69,8 +69,6 @@ df_reviews = df_kafka.selectExpr("CAST(value AS STRING)") \
     .select("value.*")
 
 df_reviews = text_classification(df_reviews)
-
-
 df_reviews_kafka = df_reviews.selectExpr("to_json(struct(*)) AS value") \
    .writeStream \
    .format("kafka") \
@@ -93,11 +91,3 @@ target_parquet_hdfs = df_reviews \
 
 df_reviews_kafka.awaitTermination()
 target_parquet_hdfs.awaitTermination()
-
-
-
-# df_reviews \
-#     .writeStream \
-#     .format("console") \
-#     .start()\
-#     .awaitTermination()

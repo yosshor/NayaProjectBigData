@@ -50,7 +50,6 @@ for message in consumer:
         jdoc["data"]["user_ratings_total"] = int(jdoc["data"]["user_ratings_total"])
         try:
             es.index(index=index_name_es, doc_type='_doc', body=jdoc)
-            sleep(1)
             print("uploaded to Elastic index name = " + index_name_es)
         except Exception as e:
             print(f"your Exception is : {e}")

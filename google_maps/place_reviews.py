@@ -9,21 +9,21 @@ from time import sleep
 from bson import json_util
 from bot_func.bot_functions import insert_place_to_mongo
 
-topic1 = 'reviews'
+topic = 'reviews'
 brokers = ['cnt7-naya-cdh63:9092']
 producer = KafkaProducer(bootstrap_servers=brokers,)
 
-#####nearby_places_details_csv#########
+
+#Get 20 nearby places and send them into kafka
 def get_reviews(api_response_string,google_maps_key):
     result_json = json.loads(api_response_string)
-    print("read json successfully")
     nearby_places_result_json = result_json['results']
     nearby = []
     for i in range(len(nearby_places_result_json)):
         name = nearby_places_result_json[i]['name'],
         place_id = nearby_places_result_json[i]['place_id']
         nearby.append({'name':name,'place_id':place_id})
-    #reviews of all places and save it to reviews.json file     
+    #reviews of all places   
     for i in range(len(nearby)):
         place_id = nearby[i]['place_id']
         place_name = nearby[i]['name']
@@ -79,9 +79,7 @@ def get_reviews(api_response_string,google_maps_key):
                 author_url = places_resluts_json['reviews'][j]['author_url'] 
                 rating = places_resluts_json['reviews'][j]['rating']
                 types = places_resluts_json['types']
-                print(types)
-                user_ratings_total = places_resluts_json['user_ratings_total']
-                
+                user_ratings_total = places_resluts_json['user_ratings_total']              
                 data = [{
                         "city": city,
                         "place_id": place_id,
@@ -102,12 +100,11 @@ def get_reviews(api_response_string,google_maps_key):
                         "text": str(review_text).replace('\n',''),
                         "rating":rating
                       }]
-                producer.send(topic1, value=json.dumps(data, default=json_util.default).encode('utf-8'))
+                producer.send(topic, value=json.dumps(data, default=json_util.default).encode('utf-8'))
                 producer.flush()
                 print('try insert to mongoDB')
-                try:
-                    insert_place_to_mongo(place_name[0],place_id)
-                except Exception as Error:
-                    print(f'The Error is : {Error}')
-                sleep(1)
+                # try:
+                #     insert_place_to_mongo(place_name[0],place_id)
+                # except Exception as Error:
+                #     print(f'The Error is : {Error}')
                 reviews.append(data)

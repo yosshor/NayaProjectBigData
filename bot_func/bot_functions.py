@@ -42,6 +42,8 @@ def send_place_review(place,parquet_path):
     spark = SparkSession.builder.appName('restaurant_score').getOrCreate()
     score = spark.read.parquet(parquet_path) 
     score = score.filter(score.name.contains(place))
+    score = score.drop("geometry","location")
+    score = score.dropDuplicates(['author_name'])
     score = score \
         .agg( mean('rating').alias("rating_mean_score") \
              , mean('polarity').alias("polarity_mean_score") \

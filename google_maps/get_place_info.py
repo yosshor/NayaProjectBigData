@@ -41,8 +41,7 @@ def get_reviews_for_place(place_id,google_maps_key):
             "name": name,
             "types":types,
             "user_ratings_total": user_ratings_total,
-            "geometry": { "location" : { "lat": lat,
-                                         "lon": lng}},
+            "geometry": { "location" : { "lat": lat, "lon": lng}},
             "serves_beer": str(serves_beer),
             "serves_breakfast": str(serves_breakfast),
             "serves_brunch": str(serves_brunch),
@@ -59,4 +58,4 @@ def get_reviews_for_place(place_id,google_maps_key):
     
         producer.send(topic, value=json.dumps(data, default=json_util.default).encode('utf-8'))
         producer.flush()
-        print(data)
+        print(f"data send via kafka topic {topic} ")

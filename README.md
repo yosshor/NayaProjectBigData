@@ -7,7 +7,6 @@ you can start the process by inserting a new place into Telegram Bot and if the 
 And Kafka Topic 2 make some ajdustment like convert the location point to geopoint etc, and send the Data to ElasticSearch and see the result on the Kibana dashboard  
 
 ## The second architecture
-### 
+### bring all the Places name from MongoDB,after the user select one place, Spark brings distinct data from HDFS and return summary of the data that made with Spark
 <img src="https://github.com/yosshor/NayaProjectBigData/blob/main/image/architecture2img.png" alt="google advertising" height="188" width="400"/> 
 
-### MongoDb for getting the Place_name, then bring distinct place_id that user selected from HDFS with Spark
